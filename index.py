@@ -49,7 +49,7 @@ for i in range(len(data)):
     array = []
     word = ""
     number = ""
-
+    #print(len(step6))
     for i in range(len(step6)):
         test = str(step6[i])
         for i in range(len(test)):
@@ -84,19 +84,20 @@ for i in range(len(data)):
         n = int(number2[i]) - int(number2[i-1])
         y.append(n+0.001)
 
-    counter=0;
-    titleCount=0;
+    counter=0
+    titleCount=0
     while (counter < len(z) ) :
-        print(str(titleCount)+"\t"+str(counter))
-        print(titleConst[titleCount]+"\t"+z[counter])
+        #print(str(titleCount)+"\t"+str(counter))
+        #print(titleConst[titleCount]+"\t"+z[counter])
         tempv = titleConst[titleCount].translate({ord(k): None for k in digits})
-        print(tempv)    
+        #print(tempv)    
         if (z[counter] == tempv):
             z[counter] = titleConst[titleCount]
             counter += 1
             titleCount +=1
-            print('---')
+            #print('---')
         else:
+            counter += 1
             titleCount+=1
             
 
@@ -108,19 +109,19 @@ for i in range(len(data)):
  #               break;
  #           else :
  #               
- #           for j in range(len(z)):
- #               if i == j:
- #                   i = i
- #               elif z[i] == z[j]:
- #                   addon = 2
- #                   k = z[j] + str(addon)
- #                   if k in z:
- #                       while k in z:
- #                           addon += 1
- #                           k = z[j] + str(addon)
- #                       z[j] += str(addon)
- #                   else:
- #                       z[j] += str(addon)
+#    for j in range(len(z)):
+#        if i == j:
+#            i = i
+#        elif z[i] == z[j]:
+#            addon = 2
+#            k = z[j] + str(addon)
+#            if k in z:
+#                while k in z:
+#                    addon += 1
+#                    k = z[j] + str(addon)
+#                    z[j] += str(addon)
+#            else:
+#               z[j] += str(addon)
 
     for i in range(len(data)):
         if len(zAxis) == i:
@@ -176,10 +177,11 @@ for i in range(len(data)):
             if (yLabels[i][yl] == titleConst[tc] ) :
                 #print (titleConst[tc]+"\t"+yLabels[i][yl]+" "+str(yl))
                 yAxis2[i].append(title[titleConst[tc]])
-        if (title[titleConst[tc]] not in yAxis2[i]) :
-            yAxis2[i].append(title[titleConst[tc]])
-            yAxis[i].insert(tc,-1)
-            xAxis[i].insert(i,xAxis[i][0])
+            elif (title[titleConst[tc]] not in yAxis2[i]) :
+                yAxis2[i].append(title[titleConst[tc]])
+                yAxis[i].insert(tc,-1)
+                xAxis[i].insert(i,xAxis[i][0])
+    print(yAxis2[i])
         #else:
          #    print(tc)   
         #print(titleConst[tc] + "\t" + str(yAxis[i][yl]))
@@ -205,11 +207,11 @@ for i in range(len(biggest)):
     legendLabels.append(addon2)
     
 
-print(xAxis[0])
-print(yAxis[0])
-print(zAxis[0])
-print(yAxis2[0])
-print("-----")
+#print(xAxis[0])
+#print(yAxis[0])
+#print(zAxis[0])
+#print(yAxis2[0])
+#print("-----")
 
 for i in range(len(data)):
     print(len(xAxis[i]))
@@ -223,12 +225,13 @@ for i in range(len(data)):
 
 colours2 = ['k','r','m','b','c','g','y','k','r','m','b','c','g','y','k','r','m','b','c','g','y','k','r','m','b','c','g','y','k','r','m','b','c','g','y','k','r','m','b','c','g','y','k','r','m','b','c','g','y','k','r','m','b','c','g','y']
 for i in range(len(data)):
-    ax.bar(xAxis[i],yAxis[i],yAxis2[i], zdir='y', color = colours2, edgecolor = colours2, alpha = 0.5, width = 1)
     print(xAxis[i])
     print(yAxis[i])
-    print(zAxis[i])
+    #print(zAxis[i])
     print(yAxis2[i])
-    print("-----")
+    #print("-----")
+    ax.bar(xAxis[i],yAxis[i],yAxis2[i], zdir='y', color = colours2, edgecolor = colours2, alpha = 0.5, width = 1)
+
 
 
 for i in range(len(data)):
@@ -257,5 +260,4 @@ ax.set_zlabel('value')
 print(biggest)
 plt.show()
 
-# 
 #read from a file
