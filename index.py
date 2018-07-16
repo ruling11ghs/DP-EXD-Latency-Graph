@@ -11,7 +11,7 @@ titleConst = ['TS', 'HR', 'BR', 'PS', 'ASV', 'AXF', 'ACO', 'ACO2', 'AXF2', 'ACV'
               'BS', 'HR2', 'BR2', 'PS2', 'ASV2', 'AXF5', 'PS3', 'AOE', 'ACO5', 'AOE2', 'ACO6', 'AXF6', 'ARE2', 'PC2','ACL2', 'ACO7', 'AXF7', 'PC3', 'HS2', 'BS2', 'TC']
 
 data = []
-file_object = open(r"C:\Users\IBM_ADMIN\Documents\Python\extLatencyLog.txt")
+file_object = open(r"C:\Users\IBM_ADMIN\Documents\Python\extLatencyLog.txt") # here you can change the string to r"(location of file)" for the required file
 fileList = file_object.readlines()
 for i in range(len(fileList)):
     file = fileList[i]
@@ -29,13 +29,13 @@ for i in range(len(data)):
     use = ""
     for m in range(len(data)):
         if i == m:
-            date1 = str(data[i])[0:24]
+            date1 = str(data[i])[0:24] # this should be the range for the number of characters for the date and time of the entry
             use = data[i]
-            date = datetime.strptime(date1, '%a %b %d %Y %H:%M:%S')
+            date = datetime.strptime(date1, '%a %b %d %Y %H:%M:%S') # the time should be in the '...' order e.g: Tues Jul 03 2018 17:30:25
     unixDate = calendar.timegm(date.utctimetuple())
     xLabels.append(unixDate)
 
-    step1 = use.split("ExtLatency: ")[1]
+    step1 = use.split("ExtLatency: ")[1] #ExtLatency needs to be the word/phrase that is directly before the stages and times
     step2 = step1.split(" ")[0:3]
     step3 = "".join(step2)
     step4 = step3.split("=")
@@ -59,11 +59,11 @@ for i in range(len(data)):
         word = ""
         number = ""
 
-    array.pop()
-    array.pop()
+    array.pop() # this removes the last value from the array array
+    array.pop() # you may not need these or may need more/less of these
     number2 = []
     x = []
-    y = [0.001]
+    y = [0]
     z = []
     zTemp = []
     zCnt = 0
@@ -128,16 +128,24 @@ for i in range(len(data)):
 
         if (title[titleConst[tc]] not in yAxis2[i]):
             yAxis2[i].append(title[titleConst[tc]])
-            yAxis[i].insert(tc, -1)
+            yAxis[i].insert(tc, 0)
             xAxis[i].insert(i, xAxis[i][0])
-    yAxis[i].insert(40, -1)
+    yAxis[i].insert(40, 0)
     xAxis[i].insert(40, xAxis[i][0])
+
+xLabels2 = []
+divide = 6   # this should be the number of labels on the x axis that show up for your number of entries
+tempNumber = len(data) // divide
+tempNumber2 = 0
+for i in range(1,divide):
+    tempNumber2 = tempNumber * i
+    xLabels2.append(xLabels[tempNumber2])
 
 fig = plt.figure()
 ax = fig.add_subplot(111, projection='3d')
 plt.xlim(1, len(data))
 
-colours = ['k', 'r', 'm', 'b', 'c', 'g', 'y']
+colours = ['k', 'r', 'm', 'b', 'c', 'g', 'y'] # this should be the colours that you want to see for the legend (key). it can be any length
 index = 0
 legendLabels = []
 addon2 = plt.Rectangle((0, 0), 2, 1, fc=colours[index])
@@ -151,15 +159,20 @@ for i in range(len(biggest)):
 
 colours2 = ['k', 'r', 'm', 'b', 'c', 'g', 'y', 'k', 'r', 'm', 'b', 'c', 'g', 'y', 'k', 'r', 'm', 'b', 'c', 'g', 'y', 'k', 'r', 'm', 'b', 'c', 'g',
             'y', 'k', 'r', 'm', 'b', 'c', 'g', 'y', 'k', 'r', 'm', 'b', 'c', 'g', 'y', 'k', 'r', 'm', 'b', 'c', 'g', 'y', 'k', 'r', 'm', 'b', 'c', 'g', 'y','k']
+            # this is the colours you want to see for the actual graph. It needs to be more than the length of biggest
+            # it should match up to the legend so should be the repeating pattern of colours
 for i in range(len(data)):
     ax.bar(xAxis[i], yAxis[i], yAxis2[i], zdir='y',
            color=colours2, edgecolor=colours2, alpha=0.5, width=1)
 
-figsize = (len(data), len(zAxis[0]))
+figsize = (len(data), len(biggest))
 ax.legend(legendLabels, biggest)
 ax.w_yaxis.set_ticklabels("")
-ax.w_xaxis.set_ticklabels(xLabels)
+ax.w_xaxis.set_ticklabels(xLabels2)
 ax.set_xlabel('Timestamp')
 ax.set_ylabel('Stage')
 ax.set_zlabel('value')
 plt.show()
+
+# I have tested the code with many different entries. The max I tried that worked was 10000. I would not recommend this. You should do about 100 entries to test as it is quick.
+# You will have to make the text with 100 entries in. This just runs for however many entries you have made.
