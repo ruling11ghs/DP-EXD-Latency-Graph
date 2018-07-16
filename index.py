@@ -8,7 +8,8 @@ import matplotlib.patches as mpatches
 from string import digits
 
 titleConst = ['TS', 'HR', 'BR', 'PS', 'ASV', 'AXF', 'ACO', 'ACO2', 'AXF2', 'ACV', 'ACO3', 'AXF3', 'ACL', 'AXF4', 'ARE', 'ACO4', 'PC', 'CS', 'BS', 'HS',
-              'BS', 'HR2', 'BR2', 'PS2', 'ASV2', 'AXF5', 'PS3', 'AOE', 'ACO5', 'AOE2', 'ACO6', 'AXF6', 'ARE2', 'PC2','ACL2', 'ACO7', 'AXF7', 'PC3', 'HS2', 'BS2', 'TC']
+              'BS', 'HR2', 'BR2', 'PS2', 'ASV2', 'AXF5', 'PS3', 'AOE', 'ACO5', 'AOE2', 'ACO6', 'AXF6', 'ARE2', 'PC2', 'ACL2', 'ACO7', 'AXF7', 'PC3', 'HS2', 'BS2', 'TC']
+titleFilter = [ 'ACO', 'AXF2','TC']
 data1 = "Tue Jul 03 2018 17:41:02 [APIMgmt_B6B7F7B787][0x80e007ad][extlatency][info] mpgw(webapi): tid(2681233)[172.18.8.14] gtid(c0873c625b3b990d0028e991): ExtLatency: TS=0,HR=0,BR=0,PS=0,ASV=0,AXF=1,ACO=1,ACO=1,AXF=3,ACO=3,AXF=8,ACL=37,AXF=37,ARE=37,ACO=37,PC=37,CS=37,HS=37,BS=37, == HR=38,BR=38,PS=38,ASV=38,AXF=38,AOE=38,ACO=38,AOE=38,ACO=38,AXF=39,ARE=39,ACO=39,AXF=39,PC=39,HS=39,BS=39,TC=39, [https://172.18.13.22:443/perf/private/v1/shopping_lists/me]"
 data2 = "Tue Jul 03 2018 17:30:25 [APIMgmt_B6B7F7B787][0x80e007ad][extlatency][info] mpgw(webapi): tid(2593889)[172.18.6.14] gtid(c0873c625b3b969000279461): ExtLatency: TS=0,HR=0,BR=0,PS=0,ASV=0,AXF=1,ACO=1,ACO=1,AXF=4,ACV=4,ACO=4,AXF=10,ACL=56,AXF=56,ARE=56,ACO=56,PC=57,CS=57,HS=57,BS=57, == HR=57,BR=57,PS=57,ASV=57,AXF=58,AOE=58,ACO=58,AOE=58,ACO=58,AXF=58,ARE=59,ACO=59,AXF=59,PC=59,HS=59,BS=59,TC=59, [https://172.18.13.22:443/perf/private/v1/shopping_lists/me/c44ae5e4-7b89-11e8-8866-7d0ac1d19ef3/items]"
 data3 = "Tue Jul 03 2018 17:37:19 [APIMgmt_B6B7F7B787][0x80e007ad][extlatency][info] mpgw(webapi): tid(4354739)[172.18.6.14] gtid(c0873c625b3b982f004272b3): ExtLatency: TS=0,HR=0,BR=0,PS=0,ASV=0,AXF=1,ACO=1,ACO=1,AXF=3,ACO=3,AXF=9,ACL=40,AXF=40,ARE=40,ACO=40,PC=40,CS=40,HS=41,BS=41, == HR=41,BR=41,PS=41,ASV=41,AXF=42,AOE=42,ACO=42,AOE=42,ACO=42,AXF=42,ARE=42,ACO=42,AXF=42,PC=43,HS=43,BS=43,TC=43, [https://172.18.13.22:443/perf/private/v1/shopping_lists/me]"
@@ -90,6 +91,7 @@ for i in range(len(data)):
     while (counter < len(z)):
         # print(str(titleCount) + "\t" + str(counter))
         # print(titleConst[titleCount] + "\t" + z[counter])
+        # try :
         tempv = titleConst[titleCount].translate(
             {ord(k): None for k in digits})
         # print(tempv)
@@ -101,8 +103,9 @@ for i in range(len(data)):
         else:
             titleCount += 1
             print(z[counter])
-
-
+        # except:
+        #     counter += 1
+            # print(z[counter])
 
 
  #   for i in range(len(z)):
@@ -152,11 +155,11 @@ print(len(yAxis))
 print(len(zAxis))
 print('-----')
 # for i in range(len(data)):
- #   print(len(xAxis[i]))
-  #  print(len(yAxis[i]))
-   # print(len(zAxis[i]))
-    # if len(xAxis[i]) == len(yAxis[i]) == len(zAxis[i]):
-     #   print("True")
+#   print(len(xAxis[i]))
+#  print(len(yAxis[i]))
+# print(len(zAxis[i]))
+# if len(xAxis[i]) == len(yAxis[i]) == len(zAxis[i]):
+#   print("True")
 
 biggest = yLabels[0]
 for i in range(len(yLabels)):
@@ -173,30 +176,29 @@ for i in range(len(titleConst)):
     title[titleConst[i]] = i + 1
 
 yAxis2 = []
+xAxis2 = []
+yAxis22 = []
 for i in range(len(data)):
     yAxis2.append([])
-    for tc in range(len(titleConst)):
+    yAxis22.append([])
+    xAxis2.append([])
+    for tc in range(len(titleFilter)):
+        print(titleFilter[tc])
+        print("---")
         for yl in range(len(yLabels[i])):
-            if (yLabels[i][yl] == titleConst[tc]):
-                #print (titleConst[tc]+"\t"+yLabels[i][yl]+" "+str(yl))
-                yAxis2[i].append(title[titleConst[tc]])
+            print(yLabels[i][yl])
+            if (yLabels[i][yl] == titleFilter[tc]):
+                print(yAxis2[i])
+                yAxis2[i].append(title[titleFilter[tc]])
+                print(yAxis2[i])
+                yAxis22[i].append(yAxis[i][yl])
 
-        if (title[titleConst[tc]] not in yAxis2[i]):
-            print (str(title[titleConst[tc]])+" not in "+str(yAxis2[i]))
-            yAxis2[i].append(title[titleConst[tc]])
-            yAxis[i].insert(tc, -1)
-            xAxis[i].insert(i, xAxis[i][0])
+                xAxis2[i].append(xAxis[i][yl])
+        if (title[titleFilter[tc]] not in yAxis2[i]):
 
-        # else:
-        #    print(tc)
-        #print(titleConst[tc] + "\t" + str(yAxis[i][yl]))
-    # print('----')
-    # print(yLabels[i])
-    yAxis[i].insert(40, -1)
-    xAxis[i].insert(40, xAxis[i][0])
-# print(yAxis)
-# print(yAxis2)
-
+            yAxis2[i].append(title[titleFilter[tc]])
+            yAxis22[i].append(0)
+            xAxis2[i].append(xAxis[i][0])
 
 fig = plt.figure()
 ax = fig.add_subplot(111, projection='3d')
@@ -207,65 +209,27 @@ index = 0
 legendLabels = []
 addon2 = plt.Rectangle((0, 0), 2, 1, fc=colours[index])
 
-for i in range(len(biggest)):
+for i in range(len(titleFilter)):
     addon2 = plt.Rectangle((0, 0), 2, 1, fc=colours[index])
     index += 1
     if index > len(colours) - 1:
         index = 0
     legendLabels.append(addon2)
-#
-#
-# print(xAxis[0])
-# print(yAxis[0])
-# print(zAxis[0])
-# print(yAxis2[0])
-# print("-----")
-
-for i in range(len(data)):
-    print(len(xAxis[i]))
-    print(len(yAxis[i]))
-    print(len(yAxis2[i]))
-    if len(xAxis[i]) == len(yAxis[i]) == len(yAxis2[i]):
-        print("True")
-    else:
-        print("False")
-
 
 colours2 = ['k', 'r', 'm', 'b', 'c', 'g', 'y', 'k', 'r', 'm', 'b', 'c', 'g', 'y', 'k', 'r', 'm', 'b', 'c', 'g', 'y', 'k', 'r', 'm', 'b', 'c', 'g',
-            'y', 'k', 'r', 'm', 'b', 'c', 'g', 'y', 'k', 'r', 'm', 'b', 'c', 'g', 'y', 'k', 'r', 'm', 'b', 'c', 'g', 'y', 'k', 'r', 'm', 'b', 'c', 'g', 'y','k']
-for i in range(len(data)):
-    ax.bar(xAxis[i], yAxis[i], yAxis2[i], zdir='y',
-           color=colours2, edgecolor=colours2, alpha=0.5, width=1)
-    # print(xAxis[i])
-    # print(yAxis[i])
-    # print(zAxis[i])
-    # print(yAxis2[i])
-    # print("-----")
+            'y', 'k', 'r', 'm', 'b', 'c', 'g', 'y', 'k', 'r', 'm', 'b', 'c', 'g', 'y', 'k', 'r', 'm', 'b', 'c', 'g', 'y', 'k', 'r', 'm', 'b', 'c', 'g', 'y', 'k']
 
 
 for i in range(len(data)):
-    px = ""
-    py = ""
-    py2 = ""
-    pL = ""
-    for j in range(len(xAxis[i])):
-        #px = px +"\t"+str(xAxis[i][j])
-        py = py + "\t" + str(yAxis[i][j])
-        py2 = py2 + "\t" + str(yAxis2[i][j])
-        pL = pL + "\t" + str(titleConst[j])
+    ax.bar(xAxis2[i], yAxis22[i], yAxis2[i], zdir='y',color=colours2, edgecolor=colours2, alpha=0.5, width=1)
 
-    # print(pL)
-    # print(py)
-    # print(py2)
-    # print("------")
 figsize = (len(data), len(zAxis[0]))
-ax.legend(legendLabels, biggest)
+ax.legend(legendLabels, titleFilter)
 ax.w_yaxis.set_ticklabels("")
 ax.w_xaxis.set_ticklabels(xLabels)
 ax.set_xlabel('Timestamp')
 ax.set_ylabel('Stage')
 ax.set_zlabel('value')
-print(biggest)
 plt.show()
 
 #
