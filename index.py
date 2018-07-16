@@ -13,9 +13,18 @@ titleConst = ['TS', 'HR', 'BR', 'PS', 'ASV', 'AXF', 'ACO', 'ACO2', 'AXF2', 'ACV'
 data = []
 file_object = open(r"C:\Users\IBM_ADMIN\Documents\Python\extLatencyLog.txt") # here you can change the string to r"(location of file)" for the required file
 fileList = file_object.readlines()
-for i in range(len(fileList)):
-    file = fileList[i]
-    data.append(file)
+filter = "" # if you want a filter, put either the full URL or a section of what you are looking for
+               # this is not required
+
+if len(filter) == 0:
+    for i in range(len(fileList)):
+        file = fileList[i]
+        data.append(file)
+else:
+    for i in range(len(fileList)):
+        if filter in fileList[i]:
+            file = fileList[i]
+            data.append(file)
 
 xAxis = []
 yAxis = []
@@ -166,13 +175,15 @@ for i in range(len(data)):
            color=colours2, edgecolor=colours2, alpha=0.5, width=1)
 
 figsize = (len(data), len(biggest))
-ax.legend(legendLabels, biggest)
+ax.legend(legendLabels, titleConst)
 ax.w_yaxis.set_ticklabels("")
 ax.w_xaxis.set_ticklabels(xLabels2)
 ax.set_xlabel('Timestamp')
 ax.set_ylabel('Stage')
 ax.set_zlabel('value')
 plt.show()
+
+fig.savefig('graph.png') # you can change the name of where to save the file to whatever you want
 
 # I have tested the code with many different entries. The max I tried that worked was 10000. I would not recommend this. You should do about 100 entries to test as it is quick.
 # You will have to make the text with 100 entries in. This just runs for however many entries you have made.
