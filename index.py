@@ -9,7 +9,7 @@ from string import digits
 
 titleConst = ['TS', 'HR', 'BR', 'PS', 'ASV', 'AXF', 'ACO', 'ACO2', 'AXF2', 'ACV', 'ACO3', 'AXF3', 'ACL', 'AXF4', 'ARE', 'ACO4', 'PC', 'CS', 'BS', 'HS',
               'BS', 'HR2', 'BR2', 'PS2', 'ASV2', 'AXF5', 'PS3', 'AOE', 'ACO5', 'AOE2', 'ACO6', 'AXF6', 'ARE2', 'PC2','ACL2', 'ACO7', 'AXF7', 'PC3', 'HS2', 'BS2', 'TC']
-
+titleFilter = [ 'ACO', 'AXF2','TC']
 data = []
 file_object = open(r"C:\Users\IBM_ADMIN\Documents\Python\extLatencyLog.txt") # here you can change the string to r"(location of file)" for the required file
 fileList = file_object.readlines()
