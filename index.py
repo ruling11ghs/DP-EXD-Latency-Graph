@@ -7,8 +7,12 @@ import calendar
 import matplotlib.patches as mpatches
 from string import digits
 
-titleConst = ['TS', 'HR', 'BR', 'PS', 'ASV', 'AXF', 'ACO', 'ACO2', 'AXF2', 'ACV', 'ACO3', 'AXF3', 'ACL', 'AXF4', 'ARE', 'ACO4', 'PC', 'CS', 'BS', 'HS',
+titleConst = ['TS', 'HR', 'BR', 'PS', 'ASV', 'AXF', 'ACO', 'ACO2', 'AXF2', 'ACV', 'ACO3', 'AXF3', 'ACL', 'AXF4', 'ARE', 'ACO4', 'PC', 'CS', 'HS',
               'BS', 'HR2', 'BR2', 'PS2', 'ASV2', 'AXF5', 'PS3', 'AOE', 'ACO5', 'AOE2', 'ACO6', 'AXF6', 'ARE2', 'PC2','ACL2', 'ACO7', 'AXF7', 'PC3', 'HS2', 'BS2', 'TC']
+titleFilter = [] # put in here what you want the graph to show in the same format of titleConst
+                 # this is not required
+if len(titleFilter) == 0:
+    titleFilter = titleConst
 
 data = []
 file_object = open(r"C:\Users\IBM_ADMIN\Documents\Python\extLatencyLog.txt") # here you can change the string to r"(location of file)" for the required file
@@ -102,6 +106,7 @@ for i in range(len(data)):
         else:
             titleCount += 1
 
+
     for i in range(len(data)):
         if len(zAxis) == i:
             for j in range(len(y)):
@@ -117,7 +122,6 @@ for i in range(len(data)):
         yAxis.append(y)
         zAxis.append(zTemp)
         yLabels.append(z)
-
 biggest = yLabels[0]
 for i in range(len(yLabels)):
     if len(biggest) < len(yLabels[i]):
@@ -128,19 +132,25 @@ for i in range(len(titleConst)):
     title[titleConst[i]] = i + 1
 
 yAxis2 = []
+xAxis2 = []
+yAxis22 = []
 for i in range(len(data)):
     yAxis2.append([])
-    for tc in range(len(titleConst)):
+    yAxis22.append([])
+    xAxis2.append([])
+    for tc in range(len(titleFilter)):
         for yl in range(len(yLabels[i])):
-            if (yLabels[i][yl] == titleConst[tc]):
-                yAxis2[i].append(title[titleConst[tc]])
+            if (yLabels[i][yl] == titleFilter[tc]):
+                yAxis2[i].append(title[titleFilter[tc]])
+                yAxis22[i].append(yAxis[i][yl])
 
-        if (title[titleConst[tc]] not in yAxis2[i]):
-            yAxis2[i].append(title[titleConst[tc]])
-            yAxis[i].insert(tc, 0)
-            xAxis[i].insert(i, xAxis[i][0])
-    yAxis[i].insert(40, 0)
-    xAxis[i].insert(40, xAxis[i][0])
+                xAxis2[i].append(xAxis[i][yl])
+        if (title[titleFilter[tc]] not in yAxis2[i]):
+
+            yAxis2[i].append(title[titleFilter[tc]])
+            yAxis22[i].append(0)
+            xAxis2[i].append(xAxis[i][0])
+
 
 xLabels2 = []
 divide = 6   # this should be the number of labels on the x axis that show up for your number of entries
@@ -149,6 +159,7 @@ tempNumber2 = 0
 for i in range(1,divide):
     tempNumber2 = tempNumber * i
     xLabels2.append(xLabels[tempNumber2])
+
 
 fig = plt.figure()
 ax = fig.add_subplot(111, projection='3d')
@@ -159,7 +170,7 @@ index = 0
 legendLabels = []
 addon2 = plt.Rectangle((0, 0), 2, 1, fc=colours[index])
 
-for i in range(len(biggest)):
+for i in range(len(titleFilter)):
     addon2 = plt.Rectangle((0, 0), 2, 1, fc=colours[index])
     index += 1
     if index > len(colours) - 1:
@@ -167,15 +178,17 @@ for i in range(len(biggest)):
     legendLabels.append(addon2)
 
 colours2 = ['k', 'r', 'm', 'b', 'c', 'g', 'y', 'k', 'r', 'm', 'b', 'c', 'g', 'y', 'k', 'r', 'm', 'b', 'c', 'g', 'y', 'k', 'r', 'm', 'b', 'c', 'g',
-            'y', 'k', 'r', 'm', 'b', 'c', 'g', 'y', 'k', 'r', 'm', 'b', 'c', 'g', 'y', 'k', 'r', 'm', 'b', 'c', 'g', 'y', 'k', 'r', 'm', 'b', 'c', 'g', 'y','k']
-            # this is the colours you want to see for the actual graph. It needs to be more than the length of biggest
-            # it should match up to the legend so should be the repeating pattern of colours
+
+            'y', 'k', 'r', 'm', 'b', 'c', 'g', 'y', 'k', 'r', 'm', 'b', 'c', 'g', 'y', 'k', 'r', 'm', 'b', 'c', 'g', 'y', 'k', 'r', 'm', 'b', 'c', 'g', 'y']
+
+
 for i in range(len(data)):
-    ax.bar(xAxis[i], yAxis[i], yAxis2[i], zdir='y',
-           color=colours2, edgecolor=colours2, alpha=0.5, width=1)
+    ax.bar(xAxis2[i], yAxis22[i], yAxis2[i], zdir='y',color=colours2, edgecolor=colours2, alpha=0.5, width=1)
 
 figsize = (len(data), len(biggest))
-ax.legend(legendLabels, titleConst)
+
+ax.legend(legendLabels, titleFilter)
+
 ax.w_yaxis.set_ticklabels("")
 ax.w_xaxis.set_ticklabels(xLabels2)
 ax.set_xlabel('Timestamp')
