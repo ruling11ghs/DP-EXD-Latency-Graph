@@ -11,7 +11,7 @@ from optparse import OptionParser
 parser = OptionParser()
 
 parser.add_option("-f","--filter",
-                  help="add a filter of which stages to show with format ( 'TS' )")
+                  help="add a filter of which stages to show with format ( 'TS','BS' )")
 
 parser.add_option("-u","--URLfilter",
                   help="add a part of the URL to show only those bars")
@@ -22,6 +22,9 @@ parser.add_option("-s","--save",
 parser.add_option("-v","--view", action="store_true",
                   help="choose whether you want to view the image or not.")
 
+parser.add_option("-n","--filename",
+                  help="put here what the name of the file is that you want to have the code read from. Make sure .txt or other is on the end")
+
 (options, args) = parser.parse_args()
 
 titleConst = ['TS', 'HR', 'BR', 'PS', 'ASV', 'AXF', 'ACO', 'ACO2', 'AXF2', 'ACV', 'ACO3', 'AXF3', 'ACL', 'AXF4', 'ARE', 'ACO4', 'PC', 'CS', 'HS',
@@ -31,6 +34,12 @@ titleConst = ['TS', 'HR', 'BR', 'PS', 'ASV', 'AXF', 'ACO', 'ACO2', 'AXF2', 'ACV'
 
 titleFilter1 = str(options.filter) # put in here the stages you want the graph to show in the same format of titleConst
                                    # this is not required
+
+if titleFilter1 != "None":
+    if titleFilter1 not in titleConst:
+        print("You have not put a valid filter. Make sure you stick to the format 'AXF','AXF2'")
+        exit()
+
 titleFilter2 = "".join(titleFilter1)
 titleFilter = titleFilter2.split(",")
 
@@ -38,7 +47,8 @@ if titleFilter == ['None']:
     titleFilter = titleConst
 
 data = []
-file_object = open(r"C:\Users\IBM_ADMIN\Documents\Python\extLatencyLog.txt") # here you can change the string to ( r"(location of file)" ) for the required file
+location = options.filename
+file_object = open(str(location),"r") # here you can change the string to ( r"(location of file)" ) for the required file
 fileList = file_object.readlines()
 filter = str(options.URLfilter) # if you want a filter to see only some of the entries then type it inside these speech marks
                # this is not required
