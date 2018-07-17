@@ -6,21 +6,44 @@ from datetime import datetime
 import calendar
 import matplotlib.patches as mpatches
 from string import digits
+from optparse import OptionParser
+
+parser = OptionParser()
+
+parser.add_option("-f","--filter",
+                  help="add a filter of which stages to show with format ( 'TS' )")
+
+parser.add_option("-u","--URLfilter",
+                  help="add a part of the URL to show only those bars")
+
+parser.add_option("-s","--save",
+                  help="choose whether you want to save the image or not followed by the save file name after.")
+
+parser.add_option("-v","--view", action="store_true",
+                  help="choose whether you want to view the image or not.")
+
+(options, args) = parser.parse_args()
 
 titleConst = ['TS', 'HR', 'BR', 'PS', 'ASV', 'AXF', 'ACO', 'ACO2', 'AXF2', 'ACV', 'ACO3', 'AXF3', 'ACL', 'AXF4', 'ARE', 'ACO4', 'PC', 'CS', 'HS',
-              'BS', 'HR2', 'BR2', 'PS2', 'ASV2', 'AXF5', 'PS3', 'AOE', 'ACO5', 'AOE2', 'ACO6', 'AXF6', 'ARE2', 'PC2','ACL2', 'ACO7', 'AXF7', 'PC3', 'HS2', 'BS2', 'TC']
-titleFilter = [] # put in here what you want the graph to show in the same format of titleConst
-                 # this is not required
-if len(titleFilter) == 0:
+              'BS', 'HS2','BS2', 'HR2', 'BR2', 'PS2', 'ASV2', 'AXF5', 'PS3', 'AOE', 'ACO5', 'AOE2', 'ACO6', 'AXF6', 'ARE2', 'PC2','ACL2', 'ACO7', 'AXF7', 'PC3', 'HS3', 'BS3', 'TC']
+             # this is the list of every stage that your log has in it. You may need to add more so should follow the same format and add numbers if the same stage
+             # is before it at any point
+
+titleFilter1 = str(options.filter) # put in here the stages you want the graph to show in the same format of titleConst
+                                   # this is not required
+titleFilter2 = "".join(titleFilter1)
+titleFilter = titleFilter2.split(",")
+
+if titleFilter == ['None']:
     titleFilter = titleConst
 
 data = []
-file_object = open(r"C:\Users\IBM_ADMIN\Documents\Python\extLatencyLog.txt") # here you can change the string to r"(location of file)" for the required file
+file_object = open(r"C:\Users\IBM_ADMIN\Documents\Python\extLatencyLog.txt") # here you can change the string to ( r"(location of file)" ) for the required file
 fileList = file_object.readlines()
-filter = "" # if you want a filter, put either the full URL or a section of what you are looking for
+filter = str(options.URLfilter) # if you want a filter to see only some of the entries then type it inside these speech marks
                # this is not required
 
-if len(filter) == 0:
+if filter == "None":
     for i in range(len(fileList)):
         file = fileList[i]
         data.append(file)
@@ -72,7 +95,7 @@ for i in range(len(data)):
         word = ""
         number = ""
 
-    array.pop() # this removes the last value from the array array
+    array.pop() # this removes the last value from the array "array"
     array.pop() # you may not need these or may need more/less of these
     number2 = []
     x = []
@@ -106,7 +129,6 @@ for i in range(len(data)):
         else:
             titleCount += 1
 
-
     for i in range(len(data)):
         if len(zAxis) == i:
             for j in range(len(y)):
@@ -122,6 +144,7 @@ for i in range(len(data)):
         yAxis.append(y)
         zAxis.append(zTemp)
         yLabels.append(z)
+
 biggest = yLabels[0]
 for i in range(len(yLabels)):
     if len(biggest) < len(yLabels[i]):
@@ -143,10 +166,8 @@ for i in range(len(data)):
             if (yLabels[i][yl] == titleFilter[tc]):
                 yAxis2[i].append(title[titleFilter[tc]])
                 yAxis22[i].append(yAxis[i][yl])
-
                 xAxis2[i].append(xAxis[i][yl])
         if (title[titleFilter[tc]] not in yAxis2[i]):
-
             yAxis2[i].append(title[titleFilter[tc]])
             yAxis22[i].append(0)
             xAxis2[i].append(xAxis[i][0])
@@ -165,7 +186,7 @@ fig = plt.figure()
 ax = fig.add_subplot(111, projection='3d')
 plt.xlim(1, len(data))
 
-colours = ['k', 'r', 'm', 'b', 'c', 'g', 'y'] # this should be the colours that you want to see for the legend (key). it can be any length
+colours = ['k', 'r', 'm', 'b', 'c', 'g', 'y'] # this should be the colours that you want to see for the legend (key). It can be any length
 index = 0
 legendLabels = []
 addon2 = plt.Rectangle((0, 0), 2, 1, fc=colours[index])
@@ -177,9 +198,8 @@ for i in range(len(titleFilter)):
         index = 0
     legendLabels.append(addon2)
 
-colours2 = ['k', 'r', 'm', 'b', 'c', 'g', 'y', 'k', 'r', 'm', 'b', 'c', 'g', 'y', 'k', 'r', 'm', 'b', 'c', 'g', 'y', 'k', 'r', 'm', 'b', 'c', 'g',
-
-            'y', 'k', 'r', 'm', 'b', 'c', 'g', 'y', 'k', 'r', 'm', 'b', 'c', 'g', 'y', 'k', 'r', 'm', 'b', 'c', 'g', 'y', 'k', 'r', 'm', 'b', 'c', 'g', 'y']
+colours2 = ['k', 'r', 'm', 'b', 'c', 'g', 'y', 'k', 'r', 'm', 'b', 'c', 'g', 'y', 'k', 'r', 'm', 'b', 'c', 'g', 'y', 'k', 'r', 'm', 'b', 'c', 'g','y',
+            'k', 'r', 'm', 'b', 'c', 'g', 'y', 'k', 'r', 'm', 'b', 'c', 'g', 'y', 'k', 'r', 'm', 'b', 'c', 'g', 'y', 'k', 'r', 'm', 'b', 'c', 'g','y']
 
 
 for i in range(len(data)):
@@ -194,9 +214,20 @@ ax.w_xaxis.set_ticklabels(xLabels2)
 ax.set_xlabel('Timestamp')
 ax.set_ylabel('Stage')
 ax.set_zlabel('value')
-plt.show()
 
-fig.savefig('graph.png') # you can change the name of where to save the file to whatever you want
+saveChoice = options.save
+viewChoice = options.view
+
+if options == {'filter': None, 'URLfilter': None, 'save': None, 'view': None}:
+    parser.print_help()
+
+if viewChoice == True:
+    plt.show()
+
+if saveChoice == None:
+    pass
+else:
+    fig.savefig(saveChoice + ".png")
 
 # I have tested the code with many different entries. The max I tried that worked was 10000. I would not recommend this. You should do about 100 entries to test as it is quick.
-# You will have to make the text with 100 entries in. This just runs for however many entries you have made.
+# You will have to make the text with 100 entries in. This code just runs for however many entries you have made.
