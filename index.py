@@ -25,7 +25,8 @@ parser.add_option("-v","--view", action="store_true",
 parser.add_option("-n","--filename",
                   help="put here what the name of the file is that you want to have the code read from. Make sure .txt or other is on the end")
 
-
+parser.add_option("-r","--range",
+                  help="type this followed by 2 numbers ( in format 1,1 ) to see a range of time differences.")
 
 (options, args) = parser.parse_args()
 
@@ -50,8 +51,20 @@ if titleFilter == ['None']:
 
 data = []
 location = options.filename
-file_object = open(str(location),"r") # here you can change the string to ( r"(location of file)" ) for the required file
+
+if location == None:
+    print("\nYou need to have a filename so that the program can actually use data.\n")
+    parser.print_help()
+    print("\nYou need to have a filename so that the program can actually use data.\n")
+    exit()
+else:
+    file_object = open(str(location),"r")
+
 fileList = file_object.readlines()
+
+if "Log has been archived successfully" in fileList[0]:
+    fileList.pop(0)
+
 filter = str(options.URLfilter) # if you want a filter to see only some of the entries then type it inside these speech marks
                # this is not required
 
@@ -65,6 +78,7 @@ else:
             file = fileList[i]
             data.append(file)
 
+lData = len(data)
 xAxis = []
 yAxis = []
 zAxis = []
@@ -127,7 +141,7 @@ for i in range(len(data)):
     for i in range(len(number2) - 1):
         i += 1
         n = int(number2[i]) - int(number2[i - 1])
-        y.append(n + 0.001)
+        y.append(n)
 
     counter = 0
     titleCount = 0
@@ -184,6 +198,19 @@ for i in range(len(data)):
             yAxis22[i].append(0)
             xAxis2[i].append(xAxis[i][0])
 
+if options.range == None:
+    pass
+else:
+    rangeTD1 = options.range
+    rangeTD = rangeTD1.split(",")
+    if rangeTD[0] > rangeTD[1]:
+        rangeTD = rangeTD.reverse()
+    for i in range(len(yAxis22)):
+        for j in range(len(yAxis22[i]),0):
+            if yAxis22[i][j] >= int(rangeTD[0]) and yAxis22[i][j] <= int(rangeTD[1]):
+                del yAxis22[i][j]
+                del yAxis2[i][j]
+                del xAxis2[i][j]
 
 xLabels2 = []
 divide = 6   # this should be the number of labels on the x axis that show up for your number of entries
@@ -196,7 +223,7 @@ for i in range(1,divide):
 
 fig = plt.figure()
 ax = fig.add_subplot(111, projection='3d')
-plt.xlim(1, len(data))
+plt.xlim(1,len(data))
 
 colours = ['k', 'r', 'm', 'b', 'c', 'g', 'y'] # this should be the colours that you want to see for the legend (key). It can be any length
 index = 0
@@ -213,8 +240,7 @@ for i in range(len(titleFilter)):
 colours2 = ['k', 'r', 'm', 'b', 'c', 'g', 'y', 'k', 'r', 'm', 'b', 'c', 'g', 'y', 'k', 'r', 'm', 'b', 'c', 'g', 'y', 'k', 'r', 'm', 'b', 'c', 'g','y',
             'k', 'r', 'm', 'b', 'c', 'g', 'y', 'k', 'r', 'm', 'b', 'c', 'g', 'y', 'k', 'r', 'm', 'b', 'c', 'g', 'y', 'k', 'r', 'm', 'b', 'c', 'g','y']
 
-
-for i in range(len(data)):
+for i in range(lData):
     ax.bar(xAxis2[i], yAxis22[i], yAxis2[i], zdir='y',color=colours2, edgecolor=colours2, alpha=0.5, width=1)
 
 figsize = (len(data), len(biggest))
@@ -230,12 +256,6 @@ ax.set_zlabel('value')
 saveChoice = options.save
 viewChoice = options.view
 
-if options.save == None and options.view == None:
-    print("You haven't chosen to save nor view the file.")
-    parser.print_help()
-    print("You haven't chosen to save nor view the file.")
-    exit()
-
 if viewChoice == True:
     plt.show()
 
@@ -243,6 +263,11 @@ if saveChoice == None:
     pass
 else:
     fig.savefig(saveChoice + ".png")
+
+if options.save == None and options.view == None:
+    print("\nYou haven't chosen to save or view the file.")
+    parser.print_help()
+    print("\nYou haven't chosen to save or view the file.")
 
 # I have tested the code with many different entries. The max I tried that worked was 10000. I would not recommend this. You should do about 100 entries to test as it is quick.
 # You will have to make the text with 100 entries in. This code just runs for however many entries you have made.
