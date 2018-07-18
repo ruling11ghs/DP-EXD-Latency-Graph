@@ -25,6 +25,8 @@ parser.add_option("-v","--view", action="store_true",
 parser.add_option("-n","--filename",
                   help="put here what the name of the file is that you want to have the code read from. Make sure .txt or other is on the end")
 
+
+
 (options, args) = parser.parse_args()
 
 titleConst = ['TS', 'HR', 'BR', 'PS', 'ASV', 'AXF', 'ACO', 'ACO2', 'AXF2', 'ACV', 'ACO3', 'AXF3', 'ACL', 'AXF4', 'ARE', 'ACO4', 'PC', 'CS', 'HS',
@@ -228,8 +230,11 @@ ax.set_zlabel('value')
 saveChoice = options.save
 viewChoice = options.view
 
-if options == {'filter': None, 'URLfilter': None, 'save': None, 'view': None}:
+if options.save == None and options.view == None:
+    print("You haven't chosen to save nor view the file.")
     parser.print_help()
+    print("You haven't chosen to save nor view the file.")
+    exit()
 
 if viewChoice == True:
     plt.show()
